@@ -3,26 +3,42 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/notesListFragment">
 
     <fragment
-        android:id="@+id/FirstFragment"
-        android:name="com.strangecoder.notesapp.FirstFragment"
-        android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
-
+        android:id="@+id/loginFragment"
+        android:name="com.strangecoder.notesapp.fragments.LoginFragment"
+        android:label="Login"
+        tools:layout="@layout/fragment_login" >
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            android:id="@+id/action_loginFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_notesListFragment"
+            app:destination="@id/notesListFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.strangecoder.notesapp.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
-
+        android:id="@+id/registerFragment"
+        android:name="com.strangecoder.notesapp.fragments.RegisterFragment"
+        android:label="Register"
+        tools:layout="@layout/fragment_register" >
         <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_registerFragment_to_notesListFragment"
+            app:destination="@id/notesListFragment"
+            app:popUpTo="@id/registerFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/notesListFragment"
+        android:name="com.strangecoder.notesapp.fragments.NotesListFragment"
+        android:label="Notes"
+        tools:layout="@layout/fragment_notes_list">
+        <action
+            android:id="@+id/action_notesListFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/notesListFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>
