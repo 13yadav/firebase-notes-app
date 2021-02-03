@@ -54,7 +54,7 @@ class RegisterFragment : Fragment() {
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     auth.createUserWithEmailAndPassword(email, password).await()
-                    findNavController().navigate(R.id.action_registerFragment_to_notesListFragment)
+                    findNavController().navigate(RegisterFragmentDirections.actionRegisterFragmentToNotesListFragment())
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
                         Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()

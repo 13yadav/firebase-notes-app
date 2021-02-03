@@ -44,7 +44,7 @@ class LoginFragment : Fragment() {
             signInUser()
         }
         binding.gotoRegisterFragmentText.setOnClickListener {
-            findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
         }
 
     }
@@ -57,7 +57,7 @@ class LoginFragment : Fragment() {
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     auth.signInWithEmailAndPassword(email, password).await()
-                    findNavController().navigate(R.id.action_loginFragment_to_notesListFragment)
+                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToNotesListFragment())
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
                         Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()

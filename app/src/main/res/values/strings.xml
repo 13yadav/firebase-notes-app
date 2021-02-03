@@ -5,4 +5,8 @@
     <string name="email">Email</string>
     <string name="register">Register</string>
     <string name="logout">Logout</string>
+    <string name="add_note">Add Note</string>
+    <string name="title">Title</string>
+    <string name="note">Note</string>
+    <string name="save">Save</string>
 </resources>
