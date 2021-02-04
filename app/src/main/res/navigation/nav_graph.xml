@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/notesListFragment">
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.strangecoder.notesapp.fragments.LoginFragment"
+        android:name="com.strangecoder.notesapp.ui.fragments.LoginFragment"
         android:label="Login"
         tools:layout="@layout/fragment_login">
         <action
@@ -21,7 +21,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.strangecoder.notesapp.fragments.RegisterFragment"
+        android:name="com.strangecoder.notesapp.ui.fragments.RegisterFragment"
         android:label="Register"
         tools:layout="@layout/fragment_register">
         <action
@@ -32,7 +32,7 @@
     </fragment>
     <fragment
         android:id="@+id/notesListFragment"
-        android:name="com.strangecoder.notesapp.fragments.NotesListFragment"
+        android:name="com.strangecoder.notesapp.ui.fragments.NotesListFragment"
         android:label="Notes"
         tools:layout="@layout/fragment_notes_list">
         <action
@@ -49,7 +49,7 @@
     </fragment>
     <fragment
         android:id="@+id/noteDetailFragment"
-        android:name="com.strangecoder.notesapp.fragments.NoteDetailFragment"
+        android:name="com.strangecoder.notesapp.ui.fragments.NoteDetailFragment"
         android:label="Note Detail"
         tools:layout="@layout/fragment_note_detail" >
         <action
@@ -61,7 +61,7 @@
     </fragment>
     <fragment
         android:id="@+id/addNoteFragment"
-        android:name="com.strangecoder.notesapp.fragments.AddNoteFragment"
+        android:name="com.strangecoder.notesapp.ui.fragments.AddNoteFragment"
         android:label="Add New Note"
         tools:layout="@layout/fragment_add_note" >
         <action

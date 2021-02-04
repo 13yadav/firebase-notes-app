@@ -1,6 +1,5 @@
-package com.strangecoder.notesapp
+package com.strangecoder.notesapp.utils
 
-import java.text.SimpleDateFormat
 import java.util.*
 
 object Utils {

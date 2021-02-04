@@ -1,4 +1,4 @@
-package com.strangecoder.notesapp.adapters
+package com.strangecoder.notesapp.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

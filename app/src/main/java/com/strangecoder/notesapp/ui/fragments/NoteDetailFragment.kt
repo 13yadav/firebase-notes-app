@@ -1,4 +1,4 @@
-package com.strangecoder.notesapp.fragments
+package com.strangecoder.notesapp.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -1,4 +1,4 @@
-package com.strangecoder.notesapp.fragments
+package com.strangecoder.notesapp.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,14 +7,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import com.strangecoder.notesapp.R
-import com.strangecoder.notesapp.Utils
 import com.strangecoder.notesapp.databinding.FragmentAddNoteBinding
 import com.strangecoder.notesapp.model.Note
+import com.strangecoder.notesapp.utils.FirebaseConfig
+import com.strangecoder.notesapp.utils.Utils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,16 +20,6 @@ import kotlinx.coroutines.withContext
 class AddNoteFragment : Fragment() {
     private var _binding: FragmentAddNoteBinding? = null
     private val binding get() = _binding!!
-
-    private lateinit var auth: FirebaseAuth
-    private lateinit var uid: String
-    private val firestoreCollectionRef = Firebase.firestore
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        auth = Firebase.auth
-        uid = auth.currentUser?.uid.toString()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,7 +54,7 @@ class AddNoteFragment : Fragment() {
 
     private fun saveNote(note: Note) = CoroutineScope(Dispatchers.IO).launch {
         try {
-            firestoreCollectionRef.collection(uid).add(note).await()
+            FirebaseConfig.firestoreCollectionRef.collection(FirebaseConfig.getUID()).add(note).await()
             withContext(Dispatchers.Main) {
                 Toast.makeText(requireContext(), "Note Added Successfully", Toast.LENGTH_LONG)
                     .show()
