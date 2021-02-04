@@ -1,23 +1,23 @@
 package com.strangecoder.notesapp.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.ktx.toObject
+import com.strangecoder.notesapp.MainActivity
 import com.strangecoder.notesapp.R
 import com.strangecoder.notesapp.databinding.FragmentNotesListBinding
 import com.strangecoder.notesapp.model.Note
+import com.strangecoder.notesapp.ui.MainViewModel
 import com.strangecoder.notesapp.ui.adapters.Interaction
 import com.strangecoder.notesapp.ui.adapters.NotesListAdapter
-import com.strangecoder.notesapp.utils.FirebaseConfig
 
 class NotesListFragment : Fragment(), Interaction {
     private var _binding: FragmentNotesListBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,34 +32,18 @@ class NotesListFragment : Fragment(), Interaction {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel = (activity as MainActivity).viewModel
+
         binding.addNewNoteFab.setOnClickListener {
             findNavController().navigate(NotesListFragmentDirections.actionNotesListFragmentToAddNoteFragment())
         }
-        getRealtimeNotes()
+        viewModel.getRealtimeNotes()
+        viewModel.notesList.observe(viewLifecycleOwner, {
+            initListAdapter(it)
+        })
     }
 
-    private fun getRealtimeNotes() {
-        Log.d("rrLOG", "User ID: ${FirebaseConfig.getUID()}")
-        FirebaseConfig.firestoreCollectionRef.collection(FirebaseConfig.getUID())
-            .addSnapshotListener { querySnapshot, error ->
-                error?.let {
-                    Toast.makeText(requireContext(), error.message, Toast.LENGTH_LONG).show()
-                    return@addSnapshotListener
-                }
-                querySnapshot?.let { collection ->
-                    val notesList = mutableListOf<Note>()
-                    for (document in collection.documents) {
-                        val note = document.toObject<Note>()
-                        note?.let {
-                            notesList.add(it)
-                        }
-                    }
-                    initListAdapter(notesList)
-                }
-            }
-    }
-
-    private fun initListAdapter(notesList: MutableList<Note>) {
+    private fun initListAdapter(notesList: List<Note>) {
         val adapter = NotesListAdapter(this)
         binding.notesList.adapter = adapter
         adapter.submitList(notesList)

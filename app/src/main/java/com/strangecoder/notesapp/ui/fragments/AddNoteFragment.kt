@@ -7,19 +7,17 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.strangecoder.notesapp.MainActivity
 import com.strangecoder.notesapp.databinding.FragmentAddNoteBinding
 import com.strangecoder.notesapp.model.Note
-import com.strangecoder.notesapp.utils.FirebaseConfig
+import com.strangecoder.notesapp.ui.MainViewModel
 import com.strangecoder.notesapp.utils.Utils
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 
 class AddNoteFragment : Fragment() {
     private var _binding: FragmentAddNoteBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,6 +30,7 @@ class AddNoteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = (activity as MainActivity).viewModel
 
         binding.saveNoteFab.setOnClickListener {
             val title = binding.etNoteTitle.text.toString()
@@ -43,25 +42,12 @@ class AddNoteFragment : Fragment() {
                     noteDesc = noteDesc,
                     lastEdited = lastEdited
                 )
-                saveNote(note)
+                viewModel.saveNote(note)
                 findNavController().navigate(AddNoteFragmentDirections.actionAddNoteFragmentToNotesListFragment())
             } else {
-                Toast.makeText(requireContext(), "Fields can't be empty!", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), "Empty note can't be added!", Toast.LENGTH_SHORT)
                     .show()
-            }
-        }
-    }
-
-    private fun saveNote(note: Note) = CoroutineScope(Dispatchers.IO).launch {
-        try {
-            FirebaseConfig.firestoreCollectionRef.collection(FirebaseConfig.getUID()).add(note).await()
-            withContext(Dispatchers.Main) {
-                Toast.makeText(requireContext(), "Note Added Successfully", Toast.LENGTH_LONG)
-                    .show()
-            }
-        } catch (e: Exception) {
-            withContext(Dispatchers.Main) {
-                Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()
+                findNavController().navigate(AddNoteFragmentDirections.actionAddNoteFragmentToNotesListFragment())
             }
         }
     }

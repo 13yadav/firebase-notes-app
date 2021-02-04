@@ -7,8 +7,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.strangecoder.notesapp.MainActivity
 import com.strangecoder.notesapp.databinding.FragmentLoginBinding
-import com.strangecoder.notesapp.utils.FirebaseConfig
+import com.strangecoder.notesapp.ui.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,6 +19,8 @@ import kotlinx.coroutines.withContext
 class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,6 +32,7 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = (activity as MainActivity).viewModel
 
         binding.loginButton.setOnClickListener {
             signInUser()
@@ -46,7 +50,7 @@ class LoginFragment : Fragment() {
         if (email.isNotEmpty() && password.isNotEmpty()) {
             CoroutineScope(Dispatchers.IO).launch {
                 try {
-                    FirebaseConfig.firebaseAuth.signInWithEmailAndPassword(email, password).await()
+                    viewModel.firebaseAuth.signInWithEmailAndPassword(email, password).await()
                     findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToNotesListFragment())
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
@@ -59,7 +63,7 @@ class LoginFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        val currentUser = FirebaseConfig.firebaseAuth.currentUser
+        val currentUser = viewModel.firebaseAuth.currentUser
         if (currentUser != null) {
             findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToNotesListFragment())
         }

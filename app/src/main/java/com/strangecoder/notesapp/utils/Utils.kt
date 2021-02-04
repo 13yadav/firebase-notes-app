@@ -1,5 +1,8 @@
 package com.strangecoder.notesapp.utils
 
+import android.view.View
+import android.widget.EditText
+import android.widget.TextView
 import java.util.*
 
 object Utils {
@@ -13,5 +16,21 @@ object Utils {
 
     fun getCurrentDateTime(): Date {
         return Calendar.getInstance().time
+    }
+
+    fun TextView.hide() {
+        visibility = View.GONE
+    }
+
+    fun TextView.show() {
+        visibility = View.VISIBLE
+    }
+
+    fun EditText.hide() {
+        visibility = View.GONE
+    }
+
+    fun EditText.show() {
+        visibility = View.VISIBLE
     }
 }
