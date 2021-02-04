@@ -26,7 +26,9 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:hint="@string/email">
+            android:hint="@string/email"
+            app:boxStrokeColor="@color/secondary_color_light"
+            app:hintTextColor="@color/secondary_color_light">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etEmail"
@@ -43,7 +45,9 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:hint="@string/password">
+            android:hint="@string/password"
+            app:boxStrokeColor="@color/secondary_color_light"
+            app:hintTextColor="@color/secondary_color_light">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etPassword"
@@ -60,6 +64,8 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:text="@string/register" />
+            android:backgroundTint="@color/secondary_color"
+            android:text="@string/register"
+            android:textColor="@color/black" />
     </LinearLayout>
 </ScrollView>
