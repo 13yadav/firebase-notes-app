@@ -45,6 +45,12 @@ class NotesListFragment : Fragment(), Interaction {
             val addNoteTransitionName = getString(R.string.add_note_element)
             val extras = FragmentNavigatorExtras(it to addNoteTransitionName)
             val directions = NotesListFragmentDirections.actionNotesListFragmentToAddNoteFragment()
+            exitTransition = MaterialElevationScale(false).apply {
+                duration = 300L
+            }
+            reenterTransition = MaterialElevationScale(true).apply {
+                duration = 300L
+            }
             findNavController().navigate(directions, extras)
         }
         adapter = NotesListAdapter(this)
