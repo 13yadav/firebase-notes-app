@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.transition.MaterialContainerTransform
 import com.strangecoder.notesapp.MainActivity
+import com.strangecoder.notesapp.R
 import com.strangecoder.notesapp.databinding.FragmentNoteDetailBinding
 import com.strangecoder.notesapp.model.Note
 import com.strangecoder.notesapp.ui.MainViewModel
@@ -20,6 +22,15 @@ class NoteDetailFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var viewModel: MainViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedElementEnterTransition = MaterialContainerTransform().apply {
+            drawingViewId = R.id.nav_host_fragment
+            duration = 300L
+            setAllContainerColors(resources.getColor(R.color.primary_color_dark))
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -9,4 +9,8 @@
     <string name="title">Title</string>
     <string name="note">Note</string>
     <string name="save">Save</string>
+    <string name="note_card_transition_name">note_card_%1$s</string>
+    <string name="note_detail_transition_name">note_detail</string>
+    <string name="add_note_fab_element">add_note_fab_element</string>
+    <string name="add_note_element">add_note_element</string>
 </resources>

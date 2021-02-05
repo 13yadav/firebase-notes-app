@@ -1,6 +1,7 @@
 package com.strangecoder.notesapp.ui.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -35,17 +36,16 @@ class NotesListAdapter(
     ) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(note: Note) {
-            binding.noteTitle.text = note.title
-            binding.noteDesc.text = note.noteDesc
+            binding.note = note
             itemView.setOnClickListener {
-                interaction.onItemClicked(adapterPosition, note)
+                interaction.onItemClicked(it, note)
             }
         }
     }
 }
 
 interface Interaction {
-    fun onItemClicked(position: Int, note: Note)
+    fun onItemClicked(view: View, note: Note)
 }
 
 class NoteItemDiffCallback : DiffUtil.ItemCallback<Note>() {

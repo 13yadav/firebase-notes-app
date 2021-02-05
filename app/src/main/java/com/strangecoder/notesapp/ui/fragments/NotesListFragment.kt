@@ -2,8 +2,11 @@ package com.strangecoder.notesapp.ui.fragments
 
 import android.os.Bundle
 import android.view.*
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.transition.MaterialElevationScale
 import com.google.firebase.auth.FirebaseAuth
 import com.strangecoder.notesapp.MainActivity
 import com.strangecoder.notesapp.R
@@ -18,6 +21,7 @@ class NotesListFragment : Fragment(), Interaction {
     private val binding get() = _binding!!
 
     private lateinit var viewModel: MainViewModel
+    private lateinit var adapter: NotesListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,19 +38,21 @@ class NotesListFragment : Fragment(), Interaction {
 
         viewModel = (activity as MainActivity).viewModel
 
+        postponeEnterTransition()
+        view.doOnPreDraw { startPostponedEnterTransition() }
+
         binding.addNewNoteFab.setOnClickListener {
-            findNavController().navigate(NotesListFragmentDirections.actionNotesListFragmentToAddNoteFragment())
+            val addNoteTransitionName = getString(R.string.add_note_element)
+            val extras = FragmentNavigatorExtras(it to addNoteTransitionName)
+            val directions = NotesListFragmentDirections.actionNotesListFragmentToAddNoteFragment()
+            findNavController().navigate(directions, extras)
         }
+        adapter = NotesListAdapter(this)
         viewModel.getRealtimeNotes()
         viewModel.notesList.observe(viewLifecycleOwner, {
-            initListAdapter(it)
+            binding.notesList.adapter = adapter
+            adapter.submitList(it)
         })
-    }
-
-    private fun initListAdapter(notesList: List<Note>) {
-        val adapter = NotesListAdapter(this)
-        binding.notesList.adapter = adapter
-        adapter.submitList(notesList)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -70,9 +76,17 @@ class NotesListFragment : Fragment(), Interaction {
         _binding = null
     }
 
-    override fun onItemClicked(position: Int, note: Note) {
-        findNavController().navigate(
+    override fun onItemClicked(view: View, note: Note) {
+        val noteCardDetailTransitionName = getString(R.string.note_detail_transition_name)
+        val extras = FragmentNavigatorExtras(view to noteCardDetailTransitionName)
+        val directions =
             NotesListFragmentDirections.actionNotesListFragmentToNoteDetailFragment(note)
-        )
+        exitTransition = MaterialElevationScale(false).apply {
+            duration = 300L
+        }
+        reenterTransition = MaterialElevationScale(true).apply {
+            duration = 300L
+        }
+        findNavController().navigate(directions, extras)
     }
 }

@@ -10,10 +10,11 @@
         android:id="@+id/notesList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipToPadding="false"
         android:orientation="vertical"
         android:paddingTop="8dp"
-        android:clipToPadding="false"
         android:scrollbars="vertical"
+        android:transitionGroup="true"
         app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
         app:spanCount="2"
         tools:listitem="@layout/list_item_notes" />
@@ -26,6 +27,7 @@
         android:layout_marginBottom="16dp"
         android:contentDescription="@string/add_note"
         android:src="@drawable/ic_add"
+        android:transitionName="@string/add_note_fab_element"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
