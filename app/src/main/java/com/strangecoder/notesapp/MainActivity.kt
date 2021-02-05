@@ -3,6 +3,10 @@ package com.strangecoder.notesapp
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.strangecoder.notesapp.databinding.ActivityMainBinding
 import com.strangecoder.notesapp.ui.MainViewModel
 import com.strangecoder.notesapp.ui.ViewModelFactory
@@ -12,13 +16,24 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var viewModel: MainViewModel
 
+    private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var navController: NavController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setSupportActionBar(findViewById(R.id.toolbar))
+        setSupportActionBar(binding.toolbar)
 
         val viewModelFactory = ViewModelFactory(application)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+
+        val navGraphIds = setOf(
+            R.id.loginFragment,
+            R.id.notesListFragment
+        )
+        navController = findNavController(R.id.nav_host_fragment)
+        appBarConfiguration = AppBarConfiguration(navGraphIds)
+        binding.toolbar.setupWithNavController(navController, appBarConfiguration)
     }
 }
