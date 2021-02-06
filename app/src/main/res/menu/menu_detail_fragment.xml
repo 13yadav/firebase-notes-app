@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.strangecoder.notesapp.MainActivity">
+
+    <group android:id="@+id/groupDetailMenu">
+
+        <item
+            android:id="@+id/actionDelete"
+            android:icon="@drawable/ic_delete"
+            android:orderInCategory="100"
+            android:title="@string/delete"
+            app:showAsAction="always" />
+        <item
+            android:id="@+id/actionEdit"
+            android:icon="@drawable/ic_edit"
+            android:orderInCategory="100"
+            android:title="@string/delete"
+            app:showAsAction="ifRoom" />
+    </group>
+</menu>

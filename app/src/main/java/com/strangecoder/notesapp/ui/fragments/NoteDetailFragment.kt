@@ -1,9 +1,7 @@
 package com.strangecoder.notesapp.ui.fragments
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -17,11 +15,14 @@ import com.strangecoder.notesapp.utils.Utils
 import com.strangecoder.notesapp.utils.Utils.hide
 import com.strangecoder.notesapp.utils.Utils.show
 
+
 class NoteDetailFragment : Fragment() {
     private var _binding: FragmentNoteDetailBinding? = null
     private val binding get() = _binding!!
+    private var menu: Menu? = null
 
     private lateinit var viewModel: MainViewModel
+    private lateinit var noteItem: Note
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +39,7 @@ class NoteDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentNoteDetailBinding.inflate(inflater, container, false)
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -46,21 +48,15 @@ class NoteDetailFragment : Fragment() {
         viewModel = (activity as MainActivity).viewModel
 
         val args: NoteDetailFragmentArgs by navArgs()
-        val noteItem = args.noteItem
+        noteItem = args.noteItem
 
         noteItem.apply {
             binding.noteTitle.text = title
             binding.noteDesc.text = noteDesc
             binding.lastEditText.text = lastEdited
         }
-
-        binding.noteTitle.setOnClickListener {
-            enableEditing(noteItem)
-        }
-        binding.noteDesc.setOnClickListener {
-            enableEditing(noteItem)
-        }
         binding.updateNoteFab.setOnClickListener {
+            showOverflowMenu(true)
             viewModel.updateNote(noteItem, getNewNoteMap())
             findNavController().navigate(NoteDetailFragmentDirections.actionNoteDetailFragmentToNotesListFragment())
         }
@@ -94,6 +90,34 @@ class NoteDetailFragment : Fragment() {
             map["noteDesc"] = noteDesc
         map["lastEdited"] = lastEdited
         return map
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        this.menu = menu
+        showOverflowMenu(true)
+        inflater.inflate(R.menu.menu_detail_fragment, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.actionDelete -> {
+                viewModel.deleteNote(noteItem)
+                findNavController().navigate(NoteDetailFragmentDirections.actionNoteDetailFragmentToNotesListFragment())
+                true
+            }
+            R.id.actionEdit -> {
+                showOverflowMenu(false)
+                enableEditing(noteItem)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun showOverflowMenu(showMenu: Boolean) {
+        if (menu == null) return
+        menu!!.setGroupVisible(R.id.groupDetailMenu, showMenu)
     }
 
     override fun onDestroy() {

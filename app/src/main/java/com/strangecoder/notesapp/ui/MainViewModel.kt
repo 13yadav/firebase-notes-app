@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.*
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -70,13 +71,7 @@ class MainViewModel(
 
     fun updateNote(note: Note, newNoteMap: Map<String, Any>) =
         CoroutineScope(Dispatchers.IO).launch {
-            val noteQuery =
-                firestoreCollectionRef.collection(getUID())
-                    .whereEqualTo("title", note.title)
-                    .whereEqualTo("noteDesc", note.noteDesc)
-                    .whereEqualTo("lastEdited", note.lastEdited)
-                    .get()
-                    .await()
+            val noteQuery = queryNoteForId(note)
             if (noteQuery.documents.isNotEmpty()) {
                 for (document in noteQuery) {
                     try {
@@ -96,6 +91,38 @@ class MainViewModel(
                 }
             }
         }
+
+    fun deleteNote(note: Note) =
+        CoroutineScope(Dispatchers.IO).launch {
+            val noteQuery = queryNoteForId(note)
+            if (noteQuery.documents.isNotEmpty()) {
+                for (document in noteQuery) {
+                    try {
+                        firestoreCollectionRef.collection(getUID())
+                            .document(document.id)
+                            .delete().await()
+                    } catch (e: Exception) {
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(getApplication(), e.message, Toast.LENGTH_LONG).show()
+                        }
+                    }
+                }
+            } else {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(getApplication(), "No such note exists", Toast.LENGTH_LONG)
+                        .show()
+                }
+            }
+        }
+
+    private suspend fun queryNoteForId(note: Note): QuerySnapshot {
+        return firestoreCollectionRef.collection(getUID())
+            .whereEqualTo("title", note.title)
+            .whereEqualTo("noteDesc", note.noteDesc)
+            .whereEqualTo("lastEdited", note.lastEdited)
+            .get()
+            .await()
+    }
 
 }
 
