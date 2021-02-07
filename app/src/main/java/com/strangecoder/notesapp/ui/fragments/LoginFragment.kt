@@ -61,14 +61,6 @@ class LoginFragment : Fragment() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        val currentUser = viewModel.firebaseAuth.currentUser
-        if (currentUser != null) {
-            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToNotesListFragment())
-        }
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
