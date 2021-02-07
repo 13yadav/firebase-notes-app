@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:transitionName="@string/add_note_element"
+    android:transitionGroup="true"
     tools:context=".ui.fragments.AddNoteFragment">
 
     <EditText

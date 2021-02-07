@@ -34,9 +34,6 @@ class MainActivity : AppCompatActivity() {
             R.id.notesListFragment
         )
         navController = findNavController(R.id.nav_host_fragment)
-        appBarConfiguration = AppBarConfiguration(navGraphIds)
-        binding.toolbar.setupWithNavController(navController, appBarConfiguration)
-
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (destination.id == R.id.splashFragment) {
                 binding.toolbar.visibility = View.GONE
@@ -44,5 +41,8 @@ class MainActivity : AppCompatActivity() {
                 binding.toolbar.visibility = View.VISIBLE
             }
         }
+
+        appBarConfiguration = AppBarConfiguration(navGraphIds)
+        binding.toolbar.setupWithNavController(navController, appBarConfiguration)
     }
 }

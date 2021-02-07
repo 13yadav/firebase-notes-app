@@ -17,7 +17,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:transitionName="@{@string/note_card_transition_name(note.lastEdited)}">
+        android:transitionName="@{@string/note_card_transition_name(note.title)}">
 
         <LinearLayout
             android:layout_width="wrap_content"

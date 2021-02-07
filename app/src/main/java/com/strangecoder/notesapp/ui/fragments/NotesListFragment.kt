@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.transition.MaterialElevationScale
+import com.google.android.material.transition.MaterialSharedAxis
 import com.google.firebase.auth.FirebaseAuth
 import com.strangecoder.notesapp.MainActivity
 import com.strangecoder.notesapp.R
@@ -23,6 +24,12 @@ class NotesListFragment : Fragment(), Interaction {
     private lateinit var viewModel: MainViewModel
     private lateinit var adapter: NotesListAdapter
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true)
+        returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -35,23 +42,18 @@ class NotesListFragment : Fragment(), Interaction {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        postponeEnterTransition()
+        view.doOnPreDraw {
+            startPostponedEnterTransition()
+        }
 
         viewModel = (activity as MainActivity).viewModel
 
-        postponeEnterTransition()
-        view.doOnPreDraw { startPostponedEnterTransition() }
-
         binding.addNewNoteFab.setOnClickListener {
-            val addNoteTransitionName = getString(R.string.add_note_element)
-            val extras = FragmentNavigatorExtras(it to addNoteTransitionName)
             val directions = NotesListFragmentDirections.actionNotesListFragmentToAddNoteFragment()
-            exitTransition = MaterialElevationScale(false).apply {
-                duration = 300L
-            }
-            reenterTransition = MaterialElevationScale(true).apply {
-                duration = 300L
-            }
-            findNavController().navigate(directions, extras)
+            exitTransition = MaterialSharedAxis(MaterialSharedAxis.Y, true)
+            reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Y, false)
+            findNavController().navigate(directions)
         }
         adapter = NotesListAdapter(this)
         viewModel.getRealtimeNotes()
@@ -87,12 +89,8 @@ class NotesListFragment : Fragment(), Interaction {
         val extras = FragmentNavigatorExtras(view to noteCardDetailTransitionName)
         val directions =
             NotesListFragmentDirections.actionNotesListFragmentToNoteDetailFragment(note)
-        exitTransition = MaterialElevationScale(false).apply {
-            duration = 300L
-        }
-        reenterTransition = MaterialElevationScale(true).apply {
-            duration = 300L
-        }
+        exitTransition = MaterialElevationScale(false)
+        reenterTransition = MaterialElevationScale(true)
         findNavController().navigate(directions, extras)
     }
 }

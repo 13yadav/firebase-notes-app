@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.transition.MaterialSharedAxis
 import com.strangecoder.notesapp.MainActivity
 import com.strangecoder.notesapp.databinding.FragmentRegisterBinding
 import com.strangecoder.notesapp.ui.MainViewModel
@@ -21,6 +22,12 @@ class RegisterFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var viewModel: MainViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enterTransition = MaterialSharedAxis(MaterialSharedAxis.X, true)
+        returnTransition = MaterialSharedAxis(MaterialSharedAxis.X, false)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,6 +56,8 @@ class RegisterFragment : Fragment() {
                     viewModel.firebaseAuth
                         .createUserWithEmailAndPassword(email, password)
                         .await()
+                    exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true)
+                    reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false)
                     findNavController()
                         .navigate(RegisterFragmentDirections.actionRegisterFragmentToNotesListFragment())
                 } catch (e: Exception) {

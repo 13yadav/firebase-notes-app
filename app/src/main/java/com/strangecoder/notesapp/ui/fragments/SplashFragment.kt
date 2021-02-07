@@ -4,14 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.transition.MaterialSharedAxis
 import com.strangecoder.notesapp.MainActivity
-import com.strangecoder.notesapp.R
 import com.strangecoder.notesapp.databinding.FragmentSplashBinding
 import com.strangecoder.notesapp.ui.MainViewModel
-import kotlinx.coroutines.*
 
 class SplashFragment : Fragment() {
     private var _binding: FragmentSplashBinding? = null
@@ -36,10 +34,17 @@ class SplashFragment : Fragment() {
         super.onStart()
         val currentUser = viewModel.firebaseAuth.currentUser
         if (currentUser != null) {
+            zAxisTransition()
             findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToNotesListFragment())
         } else {
+            zAxisTransition()
             findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToLoginFragment())
         }
+    }
+
+    private fun zAxisTransition() {
+        exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true)
+        reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false)
     }
 
     override fun onDestroyView() {

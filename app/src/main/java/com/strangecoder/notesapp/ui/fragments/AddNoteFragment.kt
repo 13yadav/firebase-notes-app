@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.transition.MaterialContainerTransform
+import com.google.android.material.transition.MaterialSharedAxis
 import com.strangecoder.notesapp.MainActivity
 import com.strangecoder.notesapp.R
 import com.strangecoder.notesapp.databinding.FragmentAddNoteBinding
@@ -23,12 +24,8 @@ class AddNoteFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enterTransition = MaterialContainerTransform().apply {
-            endView = view
-            duration = 300L
-            startContainerColor = resources.getColor(R.color.secondary_color)
-            endContainerColor = resources.getColor(R.color.primary_color_dark)
-        }
+        enterTransition = MaterialSharedAxis(MaterialSharedAxis.Y, true)
+        returnTransition = MaterialSharedAxis(MaterialSharedAxis.Y, false)
     }
 
     override fun onCreateView(

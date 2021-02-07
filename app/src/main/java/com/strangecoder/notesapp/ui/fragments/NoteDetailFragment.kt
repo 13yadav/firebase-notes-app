@@ -1,11 +1,14 @@
 package com.strangecoder.notesapp.ui.fragments
 
+import android.graphics.Color
 import android.os.Bundle
+import android.transition.TransitionManager
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.transition.MaterialContainerTransform
+import com.google.android.material.transition.platform.MaterialFadeThrough
 import com.strangecoder.notesapp.MainActivity
 import com.strangecoder.notesapp.R
 import com.strangecoder.notesapp.databinding.FragmentNoteDetailBinding
@@ -28,7 +31,7 @@ class NoteDetailFragment : Fragment() {
         super.onCreate(savedInstanceState)
         sharedElementEnterTransition = MaterialContainerTransform().apply {
             drawingViewId = R.id.nav_host_fragment
-            duration = 300L
+            scrimColor = Color.TRANSPARENT
             setAllContainerColors(resources.getColor(R.color.primary_color_dark))
         }
     }
@@ -108,6 +111,8 @@ class NoteDetailFragment : Fragment() {
             }
             R.id.actionEdit -> {
                 showOverflowMenu(false)
+                val fadeThrough = MaterialFadeThrough()
+                TransitionManager.beginDelayedTransition(binding.root, fadeThrough)
                 enableEditing(noteItem)
                 true
             }
