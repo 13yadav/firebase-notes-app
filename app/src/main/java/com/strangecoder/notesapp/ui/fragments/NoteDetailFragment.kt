@@ -7,6 +7,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.transition.MaterialContainerTransform
 import com.google.android.material.transition.platform.MaterialFadeThrough
 import com.strangecoder.notesapp.MainActivity
@@ -105,8 +106,7 @@ class NoteDetailFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.actionDelete -> {
-                viewModel.deleteNote(noteItem)
-                findNavController().navigate(NoteDetailFragmentDirections.actionNoteDetailFragmentToNotesListFragment())
+                showDeleteNoteConfirmationDialog()
                 true
             }
             R.id.actionEdit -> {
@@ -118,6 +118,21 @@ class NoteDetailFragment : Fragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun showDeleteNoteConfirmationDialog() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(R.string.delete_note))
+            .setMessage(getString(R.string.delete_confirmation))
+            .setNeutralButton(getString(R.string.cancel_dialog)) { dialog, _ ->
+                dialog.cancel()
+            }
+            .setPositiveButton(getString(R.string.delete_dialog)) { dialog, _ ->
+                viewModel.deleteNote(noteItem)
+                findNavController().navigate(NoteDetailFragmentDirections.actionNoteDetailFragmentToNotesListFragment())
+                dialog.dismiss()
+            }
+            .show()
     }
 
     private fun showOverflowMenu(showMenu: Boolean) {

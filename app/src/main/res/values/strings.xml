@@ -14,4 +14,8 @@
     <string name="add_note_fab_element">add_note_fab_element</string>
     <string name="add_note_element">add_note_element</string>
     <string name="delete">Delete</string>
+    <string name="delete_note">Delete Note</string>
+    <string name="delete_confirmation">Are you sure you want to delete it?</string>
+    <string name="cancel_dialog">Cancel</string>
+    <string name="delete_dialog">Delete</string>
 </resources>
