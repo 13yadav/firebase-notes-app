@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.transition.MaterialElevationScale
@@ -57,10 +58,10 @@ class NotesListFragment : Fragment(), Interaction {
         }
         adapter = NotesListAdapter(this)
         viewModel.getRealtimeNotes()
-        viewModel.notesList.observe(viewLifecycleOwner, {
+        viewModel.notesList.observe(viewLifecycleOwner) {
             binding.notesList.adapter = adapter
             adapter.submitList(it)
-        })
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
