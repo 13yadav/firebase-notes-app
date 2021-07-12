@@ -37,7 +37,7 @@ class MainViewModel(
             .collection(getUID())
             .addSnapshotListener { querySnapshot, error ->
                 error?.let {
-                    Toast.makeText(getApplication(), error.message, Toast.LENGTH_LONG).show()
+                    Toast.makeText(getApplication(), error.localizedMessage, Toast.LENGTH_LONG).show()
                     return@addSnapshotListener
                 }
                 querySnapshot?.let { collection ->
@@ -64,7 +64,7 @@ class MainViewModel(
             }
         } catch (e: Exception) {
             withContext(Dispatchers.Main) {
-                Toast.makeText(getApplication(), e.message, Toast.LENGTH_LONG).show()
+                Toast.makeText(getApplication(), e.localizedMessage, Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -80,7 +80,7 @@ class MainViewModel(
                             .set(newNoteMap, SetOptions.merge()).await()
                     } catch (e: Exception) {
                         withContext(Dispatchers.Main) {
-                            Toast.makeText(getApplication(), e.message, Toast.LENGTH_LONG).show()
+                            Toast.makeText(getApplication(), e.localizedMessage, Toast.LENGTH_LONG).show()
                         }
                     }
                 }
@@ -103,7 +103,7 @@ class MainViewModel(
                             .delete().await()
                     } catch (e: Exception) {
                         withContext(Dispatchers.Main) {
-                            Toast.makeText(getApplication(), e.message, Toast.LENGTH_LONG).show()
+                            Toast.makeText(getApplication(), e.localizedMessage, Toast.LENGTH_LONG).show()
                         }
                     }
                 }

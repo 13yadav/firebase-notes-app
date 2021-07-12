@@ -1,14 +1,17 @@
 package com.strangecoder.notesapp.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.transition.MaterialSharedAxis
 import com.strangecoder.notesapp.MainActivity
+import com.strangecoder.notesapp.R
 import com.strangecoder.notesapp.databinding.FragmentLoginBinding
 import com.strangecoder.notesapp.ui.MainViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -45,13 +48,7 @@ class LoginFragment : Fragment() {
             signInUser()
         }
         binding.gotoRegisterFragmentText.setOnClickListener {
-            exitTransition = MaterialSharedAxis(MaterialSharedAxis.X, true).apply {
-                duration = 300L
-            }
-            reenterTransition = MaterialSharedAxis(MaterialSharedAxis.X, false).apply {
-                duration = 300L
-            }
-            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
+            findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
 
     }
@@ -64,16 +61,13 @@ class LoginFragment : Fragment() {
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     viewModel.firebaseAuth.signInWithEmailAndPassword(email, password).await()
-                    exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true).apply {
-                        duration = 300L
-                    }
-                    reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false).apply {
-                        duration = 300L
-                    }
+                    exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, true)
+                    reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, false)
                     findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToNotesListFragment())
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
-                        Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()
+                        Log.e("rrLOG", e.toString())
+                        Toast.makeText(requireContext(), e.localizedMessage, Toast.LENGTH_SHORT).show()
                     }
                 }
             }
